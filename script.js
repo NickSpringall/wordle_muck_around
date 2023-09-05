@@ -27,18 +27,41 @@ let input = document.getElementById("userInput").addEventListener("keydown", (ev
         event.preventDefault()
         submitGuess(array, word)
     } else {
+    // array[counter].style.color = "white"
     array[counter].innerHTML = event.key
+    
     counter ++
     }
 }))
 
+
 function submitGuess (array, word) {
+
     wordstr = word.toString();
+
+    var letNum = {}
     for (let i = 0; i < 5; i++) {
-        console.log(array[i].innerHTML)
+        if (wordstr[i] in letNum) {
+            letNum[wordstr[i]] = (letNum[wordstr[i]]) +1
+        } else {
+            letNum[wordstr[i]] = 1
+        }
+        console.log(letNum)
+    }
+    console.log(letNum)
+
+
+    for (let i = 0; i < 5; i++) {
+
+        let checkIndex = wordstr.indexOf(array[i].innerHTML)
+
         if (array[i].innerHTML == wordstr[i]) {
-            currentdiv = array[i]
-            currentdiv.style.background-color "green"
+            array[i].style.backgroundColor = "green"
+            letNum[array[i].innerHTML] = (letNum[array[i].innerHTML] -1)
+            continue;
+
+        } else if (checkIndex != -1 && wordstr[checkIndex] != array[checkIndex].innerHTML) {
+            array[i].style.backgroundColor = "yellow"
         }
     }
 }

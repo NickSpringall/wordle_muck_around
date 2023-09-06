@@ -20,6 +20,7 @@ for (let index = 0; index < guess.length; index++) {
 
 counter = 0
 let input = document.getElementById("userInput").addEventListener("keydown", (event => {
+    // console.log(array)
     if (event.key == 'Backspace') {
         array[counter-1].innerHTML = null
         counter = counter -1
@@ -46,7 +47,6 @@ function submitGuess (array, word) {
         } else {
             letNum[wordstr[i]] = 1
         }
-        console.log(letNum)
     }
     console.log(letNum)
 
@@ -56,12 +56,23 @@ function submitGuess (array, word) {
         let checkIndex = wordstr.indexOf(array[i].innerHTML)
 
         if (array[i].innerHTML == wordstr[i]) {
-            array[i].style.backgroundColor = "green"
-            letNum[array[i].innerHTML] = (letNum[array[i].innerHTML] -1)
-            continue;
+            letNum[wordstr[i]] = (letNum[wordstr[i]] -1)
 
+            array[i].style.backgroundColor = "green"
+
+            continue; 
+
+        
         } else if (checkIndex != -1 && wordstr[checkIndex] != array[checkIndex].innerHTML) {
-            array[i].style.backgroundColor = "yellow"
+            // letNum[wordstr[i]] = (letNum[wordstr[i]] -1)
+            // console.log("here its: " + letNum[wordstr[i]])
+            if (letNum[(array[i].innerHTML)] > 0) {
+                // console.log((array[i].innerHTML))
+                array[i].style.backgroundColor = "yellow"
+                letNum[array[i].innerHTML] = (letNum[array[i].innerHTML] -1)
+                console.log(letNum)
+                continue;
+            } else continue
         }
     }
 }

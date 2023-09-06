@@ -1,16 +1,16 @@
-async function getWord() {
-    let response = await fetch( 'https://random-word-api.herokuapp.com/word?length=5');
-    let data = await response.json()
-    return data
-}
+// async function getWord() {
+//     let response = await fetch( 'https://random-word-api.herokuapp.com/word?length=5');
+//     let data = await response.json()
+//     return data
+// }
 
-var word = ""
-getWord().then(data => {
-    console.log(data)
-    word = data
-})
+var word = 'ooodd'
+// getWord().then(data => {
+//     console.log(data)
+//     word = data
+// })
 
-
+console.log(word)
 
 guess = document.getElementsByClassName("guessOne")
 array = []
@@ -20,7 +20,6 @@ for (let index = 0; index < guess.length; index++) {
 
 counter = 0
 let input = document.getElementById("userInput").addEventListener("keydown", (event => {
-    // console.log(array)
     if (event.key == 'Backspace') {
         array[counter-1].innerHTML = null
         counter = counter -1
@@ -28,7 +27,6 @@ let input = document.getElementById("userInput").addEventListener("keydown", (ev
         event.preventDefault()
         submitGuess(array, word)
     } else {
-    // array[counter].style.color = "white"
     array[counter].innerHTML = event.key
     
     counter ++
@@ -37,9 +35,10 @@ let input = document.getElementById("userInput").addEventListener("keydown", (ev
 
 
 function submitGuess (array, word) {
-
+    // convert word into string
     wordstr = word.toString();
 
+    // create array of letters in word and how many times they appear
     var letNum = {}
     for (let i = 0; i < 5; i++) {
         if (wordstr[i] in letNum) {
@@ -48,31 +47,61 @@ function submitGuess (array, word) {
             letNum[wordstr[i]] = 1
         }
     }
-    console.log(letNum)
 
-
+    // iterate over guess boxes
     for (let i = 0; i < 5; i++) {
+        
+        // create variable checking if letter exists and if so,the first index it is in the guess array
+        let ifInWordIndex = wordstr.indexOf(array[i].innerHTML)
 
-        let checkIndex = wordstr.indexOf(array[i].innerHTML)
+        let currentGuessedLetter = array[i].innerHTML
+        let currentCorrectLetter = wordstr[i]
+        
+        
+        // check if guessed letter exists in word using -1 returned from indexOf
+        if (ifInWordIndex == -1) {
+            continue;
 
-        if (array[i].innerHTML == wordstr[i]) {
-            letNum[wordstr[i]] = (letNum[wordstr[i]] -1)
-
+        // check if box has correct guess
+        } else if (currentGuessedLetter == currentCorrectLetter) {
+            // update letter count in array
+            letNum[currentCorrectLetter] = (letNum[currentCorrectLetter] -1)
+            // turn box green
             array[i].style.backgroundColor = "green"
-
             continue; 
 
-        
-        } else if (checkIndex != -1 && wordstr[checkIndex] != array[checkIndex].innerHTML) {
-            // letNum[wordstr[i]] = (letNum[wordstr[i]] -1)
-            // console.log("here its: " + letNum[wordstr[i]])
-            if (letNum[(array[i].innerHTML)] > 0) {
-                // console.log((array[i].innerHTML))
-                array[i].style.backgroundColor = "yellow"
-                letNum[array[i].innerHTML] = (letNum[array[i].innerHTML] -1)
-                console.log(letNum)
-                continue;
-            } else continue
+        } else if (currentGuessedLetter in letNum) {
+            
+            let totalTimesCurrentLetter = 0
+            array.forEach(element => {
+                if (element.innerHTML == currentGuessedLetter) {
+                    totalTimesCurrentLetter ++
+                }
+
+            });
+            
+            // console.log(totalTimesLeftCurrentLetter, currentGuessedLetter)
+
+            // check if it is correctly guessed later for all occurences
+            if (totalTimesCurrentLetter >= 1) {
+
+                var correctGuesses = 0
+
+                for(let y in wordstr){
+                    if ((array[y].innerHTML == currentGuessedLetter) && (array[y].innerHTML == wordstr[y])) {
+                        correctGuesses ++ 
+                    } 
+                }
+                console.log(correctGuesses, totalTimesCurrentLetter)
+                console.log(letNum[array[i].innerHTML])
+                if ((correctGuesses < totalTimesCurrentLetter) && (totalTimesCurrentLetter <= (letNum[array[i].innerHTML]))) {
+                     console.log("yay") 
+                    //  console.log(correctGuesses, totalTimesLeftCurrentLetter)
+
+                    array[i].style.backgroundColor = "yellow"
+                    letNum[array[i].innerHTML] = (letNum[array[i].innerHTML] -1)
+                }
         }
     }
+}
 }

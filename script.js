@@ -12,120 +12,122 @@ getWord().then(data => {
 
 console.log(word)
 
+let guess = document.getElementsByClassName("guess1")
+
+var array = []
+for (let index = 0; index < guess.length; index++) {
+    array.push(guess[index])
+}
+
+let counter = 0
+var guessNumber = 1
+let input = document.getElementById("userInput").addEventListener("keydown", (event => {
 
 
-    var guess = document.getElementsByClassName("guess1")
+    if (event.key == 'Backspace') {
+        array[counter-1].innerHTML = null
+        counter = counter -1
+    } 
+    else if (event.key == 'Enter') {
+        event.preventDefault()
+        submitGuess(array, word)
 
-    var array = []
-    for (let index = 0; index < guess.length; index++) {
-        array.push(guess[index])
+        guessNumber ++
+        counter = 0
+
+        guess = document.getElementsByClassName("guess" + guessNumber)
+        array = []
+
+        for (let index = 0; index < guess.length; index++) {
+            array.push(guess[index])
+        }
+    } 
+    else {
+    array[counter].innerHTML = event.key
+    counter ++
     }
+}))
 
-    var counter = 0
-    var guessNumber = 1
 
-    let input = document.getElementById("userInput").addEventListener("keydown", (event => {
-        
-        
+function submitGuess (array, word) {
 
-        if (event.key == 'Backspace') {
-            array[counter-1].innerHTML = null
-            counter = counter -1
+    // convert word into string
+    let wordstr = word.toString();
 
-        } else if (event.key == 'Enter') {
-            event.preventDefault()
-
-            submitGuess(array, word)
-
-            guessNumber ++
-            counter = 0
-            console.log(array)
-
-            guess = document.getElementsByClassName("guess" + guessNumber)
-            var array = []
-            for (let index = 0; index < guess.length; index++) {
-                array.push(guess[index])
-            }
-            
-
+    // create array of letters in word and how many times they appear
+    let letNum = {}
+    for (let i = 0; i < 5; i++) {
+        if (wordstr[i] in letNum) {
+            letNum[wordstr[i]] = (letNum[wordstr[i]]) +1
         } else {
-        array[counter].innerHTML = event.key
-        counter ++
+            letNum[wordstr[i]] = 1
         }
-    }))
-
-
-    function submitGuess (array, word) {
-        // convert word into string
-
-        wordstr = word.toString();
-
-        // create array of letters in word and how many times they appear
-        var letNum = {}
-        for (let i = 0; i < 5; i++) {
-            if (wordstr[i] in letNum) {
-                letNum[wordstr[i]] = (letNum[wordstr[i]]) +1
-            } else {
-                letNum[wordstr[i]] = 1
-            }
+    }
+    
+    // remove correct guesses from letter number array
+    for (let i = 0; i < 5; i++) {
+        if (array[i].innerHTML == wordstr[i]) {
+            letNum[array[i].innerHTML] = letNum[array[i].innerHTML] -1
         }
+    };
 
-        // iterate over guess boxes
-        for (let i = 0; i < 5; i++) {
-            
-            // create variable checking if letter exists and if so,the first index it is in the guess array
-            let ifInWordIndex = wordstr.indexOf(array[i].innerHTML)
-
-            let currentGuessedLetter = array[i].innerHTML
-            let currentCorrectLetter = wordstr[i]
-            
-            
-            // check if guessed letter exists in word using -1 returned from indexOf
-            if (ifInWordIndex == -1) {
-                continue;
-
-            // check if box has correct guess
-            } else if (currentGuessedLetter == currentCorrectLetter) {
-                // update letter count in array
-                letNum[currentCorrectLetter] = (letNum[currentCorrectLetter] -1)
-                // turn box green
-                array[i].style.backgroundColor = "green"
-                continue; 
-
-            } else if (currentGuessedLetter in letNum) {
-                let totalTimesCurrentLetter = 0
-                array.forEach(element => {
-                    if (element.innerHTML == currentGuessedLetter) {
-                        totalTimesCurrentLetter ++
-                    }
-                });
-
-                // check if it is correctly guessed later for all occurences
-                if (totalTimesCurrentLetter >= 1) {
-
-                    var correctGuesses = 0
-
-                    for(let y in wordstr){
-                        if ((array[y].innerHTML == currentGuessedLetter) && (array[y].innerHTML == wordstr[y])) {
-                            correctGuesses ++ 
-                        } 
-                    
-                    }
-                    console.log("correctGuesses: " + correctGuesses)
-                    console.log("totalTimesCurrentLetter: " + totalTimesCurrentLetter)
-                    console.log("letNum: " + (letNum[array[i].innerHTML]))
-
-                    if ((correctGuesses < totalTimesCurrentLetter) && (totalTimesCurrentLetter <= (letNum[array[i].innerHTML]))) {
-                        
-                        array[i].style.backgroundColor = "yellow"
-                        letNum[array[i].innerHTML] = (letNum[array[i].innerHTML] -1)
-                    }
-                }
-            }
+    // create array of guessed letters
+    guessedLetters = []
+    for (let index = 0; index < guess.length; index++) {
+        guessedLetters.push(guess[index].innerHTML)
         }
     
-
-
-
+    // create key value dictionary of letters in word and how many times they occure
+    let guessedLetterCount = {}
+    for (let i = 0; i < 5; i++) {
+        if (guessedLetters[i] in guessedLetterCount) {
+            guessedLetterCount[guessedLetters[i]] = (guessedLetterCount[guessedLetters[i]]) +1
+        } else {
+            guessedLetterCount[guessedLetters[i]] = 1
+        }
     }
 
+    // iterate over guess boxes
+    for (let i = 0; i < 5; i++) {
+
+        
+        // create variable checking if letter exists and if so,the first index it is in the guess array
+        let ifInWordIndex = wordstr.indexOf(array[i].innerHTML)
+
+        let currentGuessedLetter = array[i].innerHTML
+        let currentCorrectLetter = wordstr[i]
+
+        let currentGuessedLetterNumCorrectGuess = 0
+
+        for (let x = 0; x < 5; x++) {
+            if ((word[x] == array[x].innerHTML) && (array[x].innerHTML == currentGuessedLetter)) {
+                currentGuessedLetterNumCorrectGuess ++
+            }
+        }
+
+        let currentCorrectLetterNum = 0
+        for (let x = 0; x < 5; x++) {
+            if (currentGuessedLetter == array[x].innerHTML) {
+                currentCorrectLetterNum ++
+            }
+        }
+
+        // check if guessed letter exists in word using -1 returned from indexOf
+        if (ifInWordIndex == -1) {
+            continue;
+        }
+        // check if box has correct guess
+        else if (currentGuessedLetter == currentCorrectLetter) {
+            array[i].style.backgroundColor = "green"
+            continue; 
+        }
+
+        else if (letNum[currentGuessedLetter] > 0){
+            array[i].style.backgroundColor = "yellow";
+            letNum[currentGuessedLetter] = letNum[currentGuessedLetter] -1
+            continue;
+        }
+
+        else letNum[currentGuessedLetter] = letNum[currentGuessedLetter] -1
+    }
+}

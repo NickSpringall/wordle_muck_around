@@ -9,19 +9,65 @@ body {
 }
 
 
-#attemptOne {
+.attempt {
     display: flex;
     max-height:150px;
     flex-direction: row;
     justify-content: center;
 }
 
-.guessOne {
+.guess1 {
     margin:20px;
     height: 50px;
     width: 50px;
     border: 4px;
     background-color: rgb(132, 90, 151);
+    text-align: center;
+}
+
+.guess2 {
+    margin:20px;
+    height: 50px;
+    width: 50px;
+    border: 4px;
+    background-color: rgb(132, 90, 151);
+    text-align: center;
+}
+
+.guess3 {
+    margin:20px;
+    height: 50px;
+    width: 50px;
+    border: 4px;
+    background-color: rgb(132, 90, 151);
+    text-align: center;
+}
+
+.guess4 {
+    margin:20px;
+    height: 50px;
+    width: 50px;
+    border: 4px;
+    background-color: rgb(132, 90, 151);
+    text-align: center;
+}
+
+.guess5 {
+    margin:20px;
+    height: 50px;
+    width: 50px;
+    border: 4px;
+    background-color: rgb(132, 90, 151);
+    text-align: center;
+}
+
+.guess6 {
+    margin:20px;
+    height: 50px;
+    width: 50px;
+    border: 4px;
+    background-color: rgb(132, 90, 151);
+    text-align: center;
 }
 
 

@@ -132,7 +132,7 @@ function submitGuess (array, word) {
     function doSetTimeout(i) {
         setTimeout(function() {
             colourChange()
-        }, 1000);
+        }, 500);
 
 
 function colourChange() {

@@ -11,9 +11,7 @@ getWord().then(data => {
 })
 console.log(word)
 
-
 let guess = document.getElementsByClassName("guess1")
-
 
 var array = []
 for (let index = 0; index < guess.length; index++) {
@@ -25,39 +23,11 @@ var guessNumber = 1
 
 
 
-async function dictCheck(guessedWord) {
+async function dictAPICall(guessedWord) {
     let response = await fetch( 'https://api.dictionaryapi.dev/api/v2/entries/en/' + guessedWord);
     let data = await response.json()
     return data
    }
- 
-
-async function wordCheck(guessedWord) {
-    await dictCheck(guessedWord).then(data => {
-        try {
-        console.log("dictionary says " + data[0].word + " exists")
-        submitGuess(array, word)
-
-            guessNumber ++
-            counter = 0
-    
-            guess = document.getElementsByClassName("guess" + guessNumber)
-            array = []
-    
-            for (let index = 0; index < guess.length; index++) {
-                array.push(guess[index])
-            }
-        return data[0].word
-        }
-
-        catch(error) {
-            console.log(error.message)
-            return null
-        }
-    })
-} 
-
-
 
 let input = document.getElementById("userInput").addEventListener("keydown", (event => {
 
@@ -65,6 +35,7 @@ let input = document.getElementById("userInput").addEventListener("keydown", (ev
         array[counter-1].innerHTML = null
         counter = counter -1
     } 
+
     else if (event.key == 'Enter') {
         event.preventDefault()
 
@@ -78,7 +49,7 @@ let input = document.getElementById("userInput").addEventListener("keydown", (ev
 
 
         async function wordCheck(guessedWord) {
-            await dictCheck(guessedWord).then(data => {
+            await dictAPICall(guessedWord).then(data => {
                 try {
                 console.log("dictionary says " + data[0].word + " exists")
                 submitGuess(array, word)
@@ -94,7 +65,7 @@ let input = document.getElementById("userInput").addEventListener("keydown", (ev
                     }
                 return data[0].word
                 }
-        
+    
                 catch(error) {
                     console.log(error.message)
                     alert(guessedWord + " is not a real word!")
@@ -107,11 +78,9 @@ let input = document.getElementById("userInput").addEventListener("keydown", (ev
                     });
 
                     counter = 0
-
                     return error.message
-
                 }
-            })
+            });
         } 
         wordCheck(guessedWord)
     }
@@ -120,11 +89,7 @@ let input = document.getElementById("userInput").addEventListener("keydown", (ev
         array[counter].innerHTML = event.key
         counter ++
     }
-
 }));
-
-
-
 
 function submitGuess (array, word) {
 
@@ -190,9 +155,6 @@ function colourChange() {
         }
     }
 
-    // check if guessed letter exists in word using -1 returned from indexOf
-    // if (ifInWordIndex == -1) {
-    // }
     // check if box has correct guess
     if (currentGuessedLetter == currentCorrectLetter) {
         array[i].style.backgroundColor = "green"
@@ -208,7 +170,6 @@ function colourChange() {
     else letNum[currentGuessedLetter] = letNum[currentGuessedLetter] -1
     }
 }
-
 
 for (var i = 0; i < 5; i++) {
     doSetTimeout(i);
